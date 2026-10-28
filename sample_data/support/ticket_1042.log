@@ -1,0 +1,5 @@
+2026-10-21 09:14:02 INFO  ticket=1042 opened by customer via web form
+2026-10-21 09:14:03 INFO  ticket=1042 assigned to queue=billing
+2026-10-21 09:20:47 WARN  ticket=1042 customer pasted identity details in message body: "my SIN is 462017930 please update my file"
+2026-10-21 09:21:10 INFO  ticket=1042 agent replied, response_ms=2312
+2026-10-21 09:45:55 INFO  ticket=1042 closed status=resolved

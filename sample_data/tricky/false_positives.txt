@@ -1,0 +1,10 @@
+Things that look like sensitive numbers but are not:
+
+Phone: 416-555-0199
+Toll free: 1-800-555-0123
+Order ID: 1306925440
+Tracking: 1Z 999 AA1 01 2345 6784
+Invoice: 2026-000123
+SIN with a bad checksum: 130 692 545
+Fictitious example SIN (starts with 0): 046 454 286
+Card-length number that fails Luhn: 4111 1111 1111 1112
