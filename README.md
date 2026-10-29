@@ -52,3 +52,12 @@ Claude saw. There is no raw number in it.
 ## Sample data
 
 Everything in `sample_data/` is synthetic. See `sample_data/README.md`.
+
+## Added to claude using
+```bash
+claude mcp add pii-scanner -e SCANNER_ALLOWED_ROOT="$PWD\sample_data" -- uv run --directory "$PWD" python -m pii_scanner.server
+```
+
+![MCP Server added to claude](assets/image-1.png)
+
+![Working MCP Server returning correct results](assets/image-2.png)
