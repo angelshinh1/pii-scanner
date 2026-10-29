@@ -30,7 +30,7 @@ SYSTEM_PROMPT = f"""You audit files for sensitive data using the pii-scanner too
 The scan root is {SAMPLE_DIR.as_posix()}. Pass absolute paths inside it to the tools.
 "sample_data" means that folder.
 
-The tools only return file paths, line numbers and masked values like ***-***-544.
+The tools only return file paths, line numbers and masked values like XXX-XXX-544.
 You never see file contents or full numbers. Never guess, complete or reconstruct
 a masked number. If asked for a full number, explain that you don't have it.
 

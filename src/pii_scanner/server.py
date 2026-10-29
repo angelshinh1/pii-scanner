@@ -36,7 +36,7 @@ def scan_folder(path: str, recursive: bool = True) -> dict:
 
     Returns a summary (files scanned, files flagged, totals by kind) and a
     report per flagged file with 1-based line numbers and masked values
-    like ***-***-544. Never returns file contents or full numbers.
+    like XXX-XXX-544. Never returns file contents or full numbers.
     """
     try:
         reports, scanned = scanner.scan_folder(Path(path), recursive)
@@ -61,7 +61,7 @@ def scan_file(path: str) -> dict:
     inside the allowed scan root.
 
     Returns per-kind counts and findings with 1-based line numbers and
-    masked values like **** **** **** 1111. Never returns file contents
+    masked values like XXXX XXXX XXXX 1111. Never returns file contents
     or full numbers.
     """
     try:

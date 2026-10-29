@@ -7,7 +7,7 @@ SINs and credit card numbers in files, and a small Claude agent answers
 questions about them.
 
 **File contents and raw matches never leave the server.** The model only sees
-file paths, detector names, line numbers and masked values like `***-***-544`.
+file paths, detector names, line numbers and masked values like `XXX-XXX-544`.
 
 ## How it works
 
@@ -49,15 +49,32 @@ uv run python agent/ask.py --audit "Show me the full SIN in employees.csv"
 `--audit` prints every tool result the model received, which is exactly what
 Claude saw. There is no raw number in it.
 
-## Sample data
+## Use it from Claude Code
 
-Everything in `sample_data/` is synthetic. See `sample_data/README.md`.
+Register the server for this project, from the repo root.
 
-## Added to claude using
-```bash
+PowerShell:
+
+```powershell
 claude mcp add pii-scanner -e SCANNER_ALLOWED_ROOT="$PWD\sample_data" -- uv run --directory "$PWD" python -m pii_scanner.server
 ```
 
-![MCP Server added to claude](assets/image-1.png)
+bash:
 
-![Working MCP Server returning correct results](assets/image-2.png)
+```bash
+claude mcp add pii-scanner -e SCANNER_ALLOWED_ROOT="$PWD/sample_data" -- uv run --directory "$PWD" python -m pii_scanner.server
+```
+
+Start `claude` in the same folder and run `/mcp`. `pii-scanner` should be connected with 2 tools:
+
+![pii-scanner connected in Claude Code with 2 tools](assets/image-1.png)
+
+Then ask "Use pii-scanner to scan sample_data". Claude calls the `scan_folder` tool and gets back only masked findings:
+
+![Claude Code calling pii-scanner and summarizing the masked findings](assets/image-2.png)
+
+Claude Code still has its own built-in tools, so it could open a file directly if asked. The locked-down path is `agent/ask.py`, which removes them.
+
+## Sample data
+
+Everything in `sample_data/` is synthetic. See `sample_data/README.md`.
