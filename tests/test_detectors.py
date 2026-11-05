@@ -41,3 +41,16 @@ def test_masked_never_contains_full_number(text, raw):
     assert found  # make sure something was actually detected
     for f in found:
         assert raw not in f.masked.replace(" ", "").replace("-", "")
+
+@pytest.mark.parametrize("text,expected", [
+    ("my SIN is 130692544", "high"),
+    ("NAS : 130692544", "high"),
+    ("numéro d'assurance sociale 130692544", "high"),
+    ("Social Insurance Number 130-692-544", "high"),
+    ("Avery Tremblay,130 692 544", "medium"),
+    ("Order #130692544 shipped", "low"),
+    ("Basin 130692544", "low"), # "sin" inside a word is not a keyword
+])
+def test_sin_confidence(text, expected):
+    [f] = [f for f in detect(text) if f.kind == "SIN"]
+    assert f.confidence == expected
