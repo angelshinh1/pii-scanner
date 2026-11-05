@@ -4,6 +4,7 @@ stdout carries the protocol. Logging goes to stderr.
 """
 
 import logging
+from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
 
@@ -34,9 +35,12 @@ def scan_folder(path: str, recursive: bool = True) -> dict:
     and files over 5 MB are skipped. The path must be inside the allowed
     scan root.
 
-    Returns a summary (files scanned, files flagged, totals by kind) and a
-    report per flagged file with 1-based line numbers and masked values
-    like XXX-XXX-544. Never returns file contents or full numbers.
+    Returns a summary (files scanned, files flagged, totals by kind and by
+    confidence) and a report per flagged file with 1-based line numbers,
+    masked values like XXX-XXX-544 and a confidence: high (a keyword such
+    as SIN or card is on the line), medium (number has spaces or dashes)
+    or low (bare digits, may be an order or invoice number). Never returns
+    file contents or full numbers.
     """
     try:
         reports, scanned = scanner.scan_folder(Path(path), recursive)
@@ -49,6 +53,7 @@ def scan_folder(path: str, recursive: bool = True) -> dict:
         "files_scanned": scanned,
         "files_flagged": len(reports),
         "totals": totals(reports),
+        "by_confidence": dict(Counter(f.confidence for r in reports for f in r.findings)),
         "reports": [asdict(r) for r in reports],
     }
 
@@ -60,9 +65,10 @@ def scan_file(path: str) -> dict:
     The file must be a .txt, .csv, .md, .log or .json file under 5 MB,
     inside the allowed scan root.
 
-    Returns per-kind counts and findings with 1-based line numbers and
-    masked values like XXXX XXXX XXXX 1111. Never returns file contents
-    or full numbers.
+    Returns per-kind counts and findings with 1-based line numbers,
+    masked values like XXXX XXXX XXXX 1111 and a confidence (high,
+    medium or low, as in scan_folder). Never returns file contents or
+    full numbers.
     """
     try:
         allowed = scanner.allowed_root()

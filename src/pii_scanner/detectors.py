@@ -11,14 +11,15 @@ class Finding:
     kind: str # Either SIN or CREDIT_CARD
     line: int # 1 based line number
     masked: str # XXX-XXX-123
-    confidence: str | None = None # SIN only for now: high, medium or low
+    confidence: str # high (keyword on the line), medium (formatted) or low (bare digits)
 
 SIN_KEYWORDS = re.compile(r"\b(sin|nas)\b|social insurance|assurance sociale", re.I)
+CARD_KEYWORDS = re.compile(r"\b(cards?|visa|mastercard|amex)\b", re.I)
 
-def sin_confidence(line: str, sep: str) -> str:
-    if SIN_KEYWORDS.search(line):
+def confidence(line: str, keywords: re.Pattern, number: str) -> str:
+    if keywords.search(line):
         return "high"
-    return "medium" if sep else "low"
+    return "medium" if re.search(r"[ -]", number) else "low"
 
 SIN_RE = re.compile(r"(?<!\d)\d{3}([ -]?)\d{3}\1\d{3}(?!\d)")
 
@@ -33,7 +34,7 @@ def find_sins(line: str, line_no: int, skip: list | tuple = ()) -> list[Finding]
         if digits[0] in "08":
             continue
 
-        result.append(Finding("SIN", line_no, f"XXX-XXX-{digits[-3:]}", sin_confidence(line, m.group(1))))
+        result.append(Finding("SIN", line_no, f"XXX-XXX-{digits[-3:]}", confidence(line, SIN_KEYWORDS, m.group())))
     return result
 
 CARD_RE = re.compile(r"(?<!\d)\d(?:[ -]?\d){12,18}(?!\d)")
@@ -61,7 +62,7 @@ def find_cards(line: str, line_no: int, spans: list | None = None) -> list[Findi
             continue
         if spans is not None:
             spans.append(m.span())
-        result.append(Finding("CREDIT_CARD", line_no, f"XXXX XXXX XXXX {digits[-4:]}"))
+        result.append(Finding("CREDIT_CARD", line_no, f"XXXX XXXX XXXX {digits[-4:]}", confidence(line, CARD_KEYWORDS, m.group())))
 
     return result
 

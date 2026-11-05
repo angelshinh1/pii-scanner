@@ -31,8 +31,10 @@ async def test_scan_folder_tool(tmp_path):
     assert data["files_scanned"] == 2
     assert data["files_flagged"] == 1
     assert data["totals"] == {"CREDIT_CARD": 1}
+    assert data["by_confidence"] == {"high": 1}
     assert data["reports"][0]["path"] == "x.txt"
     assert data["reports"][0]["findings"][0]["masked"] == "XXXX XXXX XXXX 1111"
+    assert data["reports"][0]["findings"][0]["confidence"] == "high"
 
     everything = json.dumps(data) + "".join(c.text for c in result.content)
     assert "4111111111111111" not in everything

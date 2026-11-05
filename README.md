@@ -9,6 +9,11 @@ questions about them.
 **File contents and raw matches never leave the server.** The model only sees
 file paths, detector names, line numbers and masked values like `XXX-XXX-544`.
 
+Each finding also gets a confidence: `high` when a keyword (`SIN`, `NAS`,
+`social insurance`, `card`, `visa`, ...) is on the same line, `medium` when the
+number has spaces or dashes, `low` for bare digits that may be an order or
+invoice number. Nothing is dropped; low findings are just ranked last.
+
 ## How it works
 
 | Piece | File | What it does |

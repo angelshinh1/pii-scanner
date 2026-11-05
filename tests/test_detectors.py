@@ -54,3 +54,17 @@ def test_masked_never_contains_full_number(text, raw):
 def test_sin_confidence(text, expected):
     [f] = [f for f in detect(text) if f.kind == "SIN"]
     assert f.confidence == expected
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("card 4111111111111111", "high"),
+    ("paid by VISA 4111111111111111", "high"),
+    ("Mastercard 5555-5555-5555-4444", "high"),
+    ("amex 378282246310005", "high"),
+    ("went on 4111 1111 1111 1111", "medium"),
+    ("ref 4111111111111111", "low"),
+    ("discard 4111111111111111", "low"), # "card" inside a word is not a keyword
+])
+def test_card_confidence(text, expected):
+    [f] = [f for f in detect(text) if f.kind == "CREDIT_CARD"]
+    assert f.confidence == expected

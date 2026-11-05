@@ -35,8 +35,8 @@ You never see file contents or full numbers. Never guess, complete or reconstruc
 a masked number. If asked for a full number, explain that you don't have it.
 
 Answer with a short per-file summary: path, what was found, how many, and on
-which lines. SIN findings carry a confidence (high, medium, low): lead with
-the high ones."""
+which lines. Every finding has a confidence (high, medium, low): rank by it and
+lead with the high ones. Low ones may be order or invoice numbers."""
 
 
 def build_options() -> ClaudeAgentOptions:
