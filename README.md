@@ -14,6 +14,17 @@ invoice number. Nothing is dropped; low findings are just ranked last.
 
 ## How it works
 
+```mermaid
+flowchart LR
+    you(["You"]) -->|question| client["MCP client<br/>agent/ask.py or Claude Code"]
+    client <--> model["Claude model"]
+    client <-->|"stdio: masked findings only"| server
+    subgraph boundary["Trust boundary: raw data stays inside"]
+        server["pii-scanner MCP server<br/>server.py, 2 tools"] --> scanner["Scanner + detectors<br/>allowed root, Luhn, mask"]
+        scanner -->|reads| files[("Files on disk<br/>raw SINs, card numbers")]
+    end
+```
+
 | Piece | File | What it does |
 | --- | --- | --- |
 | Detectors | `src/pii_scanner/detectors.py`, `luhn.py` | Regex + Luhn + prefix rules, masks every match |
