@@ -16,13 +16,19 @@ invoice number. Nothing is dropped; low findings are just ranked last.
 
 ```mermaid
 flowchart LR
-    you(["You"]) -->|question| client["MCP client<br/>agent/ask.py or Claude Code"]
-    client <--> model["Claude model"]
-    client <-->|"stdio: masked findings only"| server
-    subgraph boundary["Trust boundary: raw data stays inside"]
-        server["pii-scanner MCP server<br/>server.py, 2 tools"] --> scanner["Scanner + detectors<br/>allowed root, Luhn, mask"]
-        scanner -->|reads| files[("Files on disk<br/>raw SINs, card numbers")]
+    you(["You"]) -->|asks| claude["Claude<br/>agent/ask.py or Claude Code"]
+    claude <-->|"masked findings only"| scanner
+    subgraph boundary["Raw data stays inside"]
+        scanner["pii-scanner<br/>MCP server + detectors"] -->|reads| files[("Files on disk<br/>raw SINs, card numbers")]
     end
+
+    classDef ai fill:#ede9fe,stroke:#7c3aed,color:#2e1065
+    classDef tool fill:#dbeafe,stroke:#2563eb,color:#172554
+    classDef raw fill:#fee2e2,stroke:#dc2626,color:#450a0a
+    class claude ai
+    class scanner tool
+    class files raw
+    style boundary fill:none,stroke:#dc2626,stroke-dasharray:6 4
 ```
 
 | Piece | File | What it does |
