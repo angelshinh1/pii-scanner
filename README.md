@@ -1,7 +1,5 @@
 # pii-scanner
 
-[![CI](https://github.com/angelshinh1/pii-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/angelshinh1/pii-scanner/actions/workflows/ci.yml)
-
 A local sensitive-data scanner exposed as an MCP server. It finds Canadian
 SINs and credit card numbers in files, and a small Claude agent answers
 questions about them.
